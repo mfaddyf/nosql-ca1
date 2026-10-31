@@ -1,9 +1,5 @@
 // =====================================================================
 // NoSQL Databases Project - Pharmacy Management System
-//
-//  comments and layout inserted! planning what insert statements to use, add in any ref links to bottom if used? - mon26oct
-//  needs review, testing seems to work ok! - fri30oct
-//
 // =====================================================================
 
 use("pharmacy")
