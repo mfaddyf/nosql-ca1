@@ -2,6 +2,7 @@
 // NoSQL Databases Project - Pharmacy Management System
 //
 //  comments and layout inserted! planning what find statements to use, add in ref links to bottom - mon26oct
+//  finish and review! - sat20oct
 //
 // =====================================================================
 
@@ -10,33 +11,45 @@ use("pharmacy")
 // ---------- 1. find() and .pretty() ----------
 
 // 1.1 Return every document in each collection
+db.patients.find().pretty()
+db.medicines.find().pretty()
+db.prescribers.find().pretty()
+db.pharmacists.find().pretty()
+db.prescriptions.find().pretty()
 
 // 1.2 Find a single document by its _id
+db.patients.findOne({ _id: ObjectId("6716a1000000000000000001") })
 
 // 1.3 Find a single document by _id using $eq
-
+db.patients.find({ _id: { $eq: ObjectId("6716a1000000000000000001") } }).pretty()
 
 // ---------- 2. Querying on multiple properties (AND) ----------
 
 // 2.1 Find documents that match two properties at once
 //     (default behaviour: all criteria must be true)
+db.medicines.find({ script_only: true, form: "Tablet" }).pretty()
 
 // 2.2 Do the same query using the explicit $and operator
-
+db.medicines.find({ $and: [{ script_only: true }, { form: "Tablet" }] }).pretty()
 
 // ---------- 3. $or ----------
 
 // 3.1 Find documents that match EITHER of two properties
-
+db.medicines.find({ $or: [{ script_only: false }, { stock_qty: 0 }] }).pretty()
 
 // ---------- 4. Comparison operators ----------
 
 // 4.1 Use $ne to find documents that do NOT match a value
+//     Prescriptions that have not been dispensed
+db.prescriptions.find({ status: { $ne: "Dispensed" } }).pretty()
 
 // 4.2 Use $gt to find documents above a value
+//     Medicines costing more than €10
+db.medicines.find({ price: { $gt: 10 } }).pretty()
 
 // 4.3 Use $lt to find documents below a value
-
+//     Patients born before 1960
+db.patients.find({ dob: { $lt: new Date("1960-01-01") } }).pretty()
 
 // ---------- 5. Querying a range of values ----------
 
