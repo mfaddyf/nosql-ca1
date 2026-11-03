@@ -13,11 +13,12 @@ db.prescribers.find().pretty()
 db.pharmacists.find().pretty()
 db.prescriptions.find().pretty()
 
-// 1.2 Find a single document by its _id
+// 1.2 Find a single document by its _id - implicit equality
 db.patients.findOne({ _id: ObjectId("6716a1000000000000000001") })
 
-// 1.3 Find a single document by _id using $eq
+// 1.3 Find a single document by _id using $eq - explicit equality
 db.patients.find({ _id: { $eq: ObjectId("6716a1000000000000000001") } }).pretty()
+
 
 // ---------- 2. Querying on multiple properties (AND) ----------
 
@@ -28,10 +29,12 @@ db.medicines.find({ script_only: true, form: "Tablet" }).pretty()
 // 2.2 Do the same query using the explicit $and operator
 db.medicines.find({ $and: [{ script_only: true }, { form: "Tablet" }] }).pretty()
 
+
 // ---------- 3. $or ----------
 
 // 3.1 Find documents that match EITHER of two properties
 db.medicines.find({ $or: [{ script_only: false }, { stock_qty: 0 }] }).pretty()
+
 
 // ---------- 4. Comparison operators ----------
 
@@ -46,6 +49,7 @@ db.medicines.find({ price: { $gt: 10 } }).pretty()
 // 4.3 Use $lt to find documents below a value
 //     Patients born before 1960
 db.patients.find({ dob: { $lt: new Date("1960-01-01") } }).pretty()
+
 
 // ---------- 5. Querying a range of values ----------
 
@@ -109,7 +113,6 @@ db.patients.find({ allergies: { $all: ["Peanuts", "Penicillin"] } }).pretty()
 db.medicines.find({
   "batches.expiry_date": { $gte: new Date("2027-01-01"), $lt: new Date("2028-01-01") }
 }).pretty()
-
 
 
 // ---------- 9. $elemMatch ----------
@@ -196,7 +199,7 @@ db.patients.distinct("allergies")
 
 
 // =====================================================================
-// EXTRAS - beyond Practical 4
+// EXTRAS
 // =====================================================================
  
 // ---------- 13. $exists and null ----------
