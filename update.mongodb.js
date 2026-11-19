@@ -73,6 +73,25 @@ db.medicines.updateMany(
     { $set: { reorder_needed: true } }
 )
 
+// 2.3 $mul - multiply a field's value
+//     Ahead of winter, the reorder level for respiratory medicines is
+//     doubled so more stock is kept on hand (Ventolin: 20 -> 40)
+db.medicines.updateMany(
+    { med_type: "Respiratory" },
+    { $mul: { reorder_level: NumberInt(2) } }
+)
+
+// 2.4 updateMany with arrayFilters
+//     Flag every batch, in every medicine, that expires before 2027.
+//     The filter picks the medicines with at least one such batch, and
+//     $[b] with arrayFilters picks which batches inside them get the flag
+//     (Ventolin VEN2410D, Glucophage GLU2409F and Nurofen NUR2312C)
+db.medicines.updateMany(
+    { "batches.expiry_date": { $lt: new Date("2027-01-01") } },
+    { $set: { "batches.$[b].expiring_soon": true } },
+    { arrayFilters: [{ "b.expiry_date": { $lt: new Date("2027-01-01") } }] }
+)
+
 
 // ---------- 3. $inc and $push together - receiving stock ----------
 
@@ -117,6 +136,14 @@ db.prescriptions.updateOne(
     }
 )
 
+// 4.3 Updating an element by its index (position) in the array
+//     Aoife Murphy's workplace moves to a different unit in the business park.
+//     Arrays start at 0, so "address.1" is her second address (work)
+db.patients.updateOne(
+    { first_name: "Aoife", last_name: "Murphy" },
+    { $set: { "address.1.line_1": "Unit 9" } }
+)
+
 
 // ---------- 5. Array update operators ----------
 
@@ -154,6 +181,14 @@ db.patients.updateOne(
 db.patients.updateOne(
     { first_name: "Emma", last_name: "Kavanagh" },
     { $push: { address: { line_1: "22 Cathedral Road", county: "Waterford", eircode: "X91 P8D3" } } }
+)
+
+// 5.6 $pop - remove the first or last element of an array
+//     1 removes the LAST element, -1 removes the FIRST.
+//     Siobhán Ryan has left her job, so her work address (the last one) is removed
+db.patients.updateOne(
+    { first_name: "Siobhán", last_name: "Ryan" },
+    { $pop: { address: 1 } }
 )
 
 
