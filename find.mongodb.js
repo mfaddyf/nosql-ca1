@@ -17,6 +17,7 @@ db.prescriptions.find().pretty()
 db.patients.findOne({ _id: ObjectId("6716a1000000000000000001") })
 
 // 1.3 Find a single document by _id using $eq - explicit equality
+use("pharmacy")
 db.patients.find({ _id: { $eq: ObjectId("6716a1000000000000000001") } }).pretty()
 
 

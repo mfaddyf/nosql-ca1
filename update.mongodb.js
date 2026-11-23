@@ -139,6 +139,7 @@ db.prescriptions.updateOne(
 // 4.3 Updating an element by its index (position) in the array
 //     Aoife Murphy's workplace moves to a different unit in the business park.
 //     Arrays start at 0, so "address.1" is her second address (work)
+use("pharmacy")
 db.patients.updateOne(
     { first_name: "Aoife", last_name: "Murphy" },
     { $set: { "address.1.line_1": "Unit 9" } }

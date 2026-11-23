@@ -121,6 +121,7 @@ db.patients.aggregate([
 
 // 5.1 Revenue per medicine
 //     $unwind gives one document per prescribed item, then $group totals them
+use("pharmacy")
 db.prescriptions.aggregate([
     { $match: { status: "Dispensed" } },
     { $unwind: "$items" },
@@ -248,6 +249,7 @@ db.prescriptions.aggregate([
 ])
 
 // 8.4 $facet - several reports from the same documents in one pipeline
+use("pharmacy")
 db.prescriptions.aggregate([
     {
         $facet: {
